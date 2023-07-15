@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:velocity_x/velocity_x.dart';
@@ -15,6 +16,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorObservers: [FlutterSmartDialog.observer],
+      // here
+      builder: FlutterSmartDialog.init(),
       title: 'Hong Kong Short Message Spam Detection in a Machine Learning Approach',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -49,22 +53,12 @@ class _MyHomePageState extends State<MyHomePage> {
   String GoogleBard_result = '';
   final formKey = GlobalKey<FormState>();
 
-  void showToastMessage(String message){
-    Fluttertoast.showToast(
-        msg: message, //message to show toast
-        toastLength: Toast.LENGTH_SHORT, //duration for message to show
-        gravity: ToastGravity.CENTER, //where you want to show, top, bottom
-        timeInSecForIosWeb: 2, //for iOS only
-        //backgroundColor: Colors.red, //background Color for message
-        textColor: Colors.white, //message text color
-        fontSize: 16.0 //message font size
-    );
-  }
-
   Future<void> submit() async{
     datetime = DateTime.now().toString();
     sms = tc_sms.text.toString();
-    showToastMessage('Message submitted');
+    setState(() {
+      SmartDialog.showLoading();
+    });
     final response = await http.post(
       Uri.parse('https://eiu051ow89.execute-api.ap-southeast-1.amazonaws.com/Test/main'),
       headers: <String, String>{
@@ -86,8 +80,14 @@ class _MyHomePageState extends State<MyHomePage> {
     final bert = data['bert_score'];
     bert_score = (double.parse(bert)*100).toStringAsFixed(2);
     setState(() {
+      SmartDialog.dismiss();
       result_visible = true;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
