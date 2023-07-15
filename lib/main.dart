@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:velocity_x/velocity_x.dart';
 import 'dart:convert';
+import 'package:intl/intl.dart';
 
 void main() {
   runApp(const MyApp());
@@ -43,11 +44,12 @@ class _MyHomePageState extends State<MyHomePage> {
   final tc_sms = TextEditingController();
   final tc_phone = TextEditingController();
   final tc_label = TextEditingController();
+  final tc_datetime = TextEditingController();
   bool result_visible = false;
   String result = '';
   String sms = '';
   String phone = '12345678';
-  String label = '';
+  String label = 'Not Sure';
   String datetime = '';
   String snn_score = '';
   String bert_score = '';
@@ -57,11 +59,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> submit() async{
     print('Submit');
-    datetime = DateTime.now().toString();
     sms = tc_sms.text.toString();
     setState(() {
       SmartDialog.showLoading();
     });
+    String _label='';
+    if(label!='Not Sure'){
+      _label = label;
+    }
     final response = await http.post(
       Uri.parse("https://eiu051ow89.execute-api.ap-southeast-1.amazonaws.com/Test/main"),
       headers: <String, String>{
@@ -70,7 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: jsonEncode(<String, String>{
         "sms": sms,
         "phone": phone,
-        "label": label,
+        "label": _label,
         "source": "web",
         "datetime": datetime
       }),
@@ -88,10 +93,16 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  Future<void> datePicker() async{
+    showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime(2000, 01), lastDate: DateTime(210, 01));
+  }
+
   @override
   void initState() {
     super.initState();
   }
+
+  final List<String> labelList = ['Not Sure','Spam', 'Ham'];
 
   @override
   Widget build(BuildContext context) {
@@ -173,6 +184,75 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),),
                         style: const TextStyle(color: Colors.black),
                       ).p(10),
+                      Container(child: Row(
+                        children: [
+                          Text('Spam/Ham label (optional):').centered().p(10),
+                          DropdownButton(
+                            value: label, //implement initial value or selected value
+                            onChanged: (value){
+                              setState(() { //set state will update UI and State of your App
+                                label = value!.toString(); //change selectval to new value
+                              });
+                            },
+                            items: labelList.map((itemone){
+                              return DropdownMenuItem(
+                                  value: itemone,
+                                  child: Text(itemone)
+                              );
+                            }).toList(),
+                          ).centered().p(10),
+                        ],
+                      ).centered(),),
+                      Container(child: Row(
+                        children: [
+                          Text('Message received date (optional):').centered().p(10),
+                          Text(datetime).centered().p(10),
+                          ConstrainedBox(
+                            constraints: BoxConstraints.tightFor(
+                                //width: MediaQuery.of(context).size.width * 0.20,
+                                height: MediaQuery.of(context).size.height * 0.10),
+                            child: ElevatedButton(
+                                onPressed: (() async{
+                                  final result = await showDatePicker(
+                                      context: context,
+                                      initialDate: DateTime.now(),
+                                      firstDate: DateTime(2000, 01),
+                                      lastDate: DateTime(2100, 12));
+                                  print(result.toString());
+                                  final timeOfDay = await showTimePicker(
+                                      context: context, initialTime: TimeOfDay.now());
+                                  print(timeOfDay);
+                                  DateFormat df = DateFormat('yyyy-MM-dd HH:mm:ss');
+                                  setState(() {
+                                    DateTime dt = DateTime(result!.year,result.month,result.day,timeOfDay!.hour,timeOfDay.minute);
+                                    datetime = df.format(dt);
+                                  });
+                                }),
+                                child: Text("Pick datetime",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontFamily: 'Noto Sans HK',
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.black,
+                                    )).centered(),
+                                style: ButtonStyle(
+                                  //backgroundColor: MaterialStateProperty.all<Color>( Color.fromARGB(0, 51, 78, 100)),
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Colors.white),
+                                    shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                            BorderRadius.circular(30.0),
+                                            side: BorderSide(color: Colors.black)
+                                        )
+                                    )
+                                )
+                            ).p(10),
+                          ),
+                        ],
+                      ).centered(),),
                     ],
                   ).centered(),
                 ).p(10).centered(),
@@ -235,22 +315,24 @@ class _MyHomePageState extends State<MyHomePage> {
                       ).centered(),
                     ]).centered().p(10),
                     Text(
-                        'Simple Neural Network Score: '+snn_score+'%',
+                        'Simple Neural Network Score:\n'+snn_score+'%',
                         style: TextStyle(
                           fontSize: 20,
                           fontFamily: 'Noto Sans HK',
                           //fontWeight: FontWeight.w700,
                           color: Colors.black,
-                        )
+                        ),
+                      textAlign: TextAlign.center,
                     ).centered().p(10),
                     Text(
-                        'Bert Score: '+bert_score+'%',
+                        'Bert Score:\n'+bert_score+'%',
                         style: TextStyle(
                           fontSize: 20,
                           fontFamily: 'Noto Sans HK',
                           //fontWeight: FontWeight.w700,
                           color: Colors.black,
-                        )
+                        ),
+                      textAlign: TextAlign.center,
                     ).centered().p(10),
                   ]),
                 ),
