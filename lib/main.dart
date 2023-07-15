@@ -98,163 +98,165 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       body: Form(
         key: formKey,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              child: VStack(
-                [
-                  Text(
-                      'Hong Kong Short Message Spam Detection in a Machine Learning Approach',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: 'Noto Sans HK',
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black,
-                      )
-                  ).centered().p(10),
-                  Text(
-                    'You can input message below to test whether it is spam or not:',
-                  ).centered().p(10),
-                  TextFormField(
-                    maxLines: null,
-                    keyboardType: TextInputType.multiline,
-                    onChanged: (value){
-                      setState(() {
+        child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  child: VStack(
+                    [
+                      Text(
+                          'Hong Kong Short Message Spam Detection in a Machine Learning Approach',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontFamily: 'Noto Sans HK',
+                            fontWeight: FontWeight.w700,
+                            color: Colors.black,
+                          )
+                      ).centered().p(10),
+                      Text(
+                        'You can input message below to test whether it is spam or not:',
+                      ).centered().p(10),
+                      TextFormField(
+                        maxLines: null,
+                        keyboardType: TextInputType.multiline,
+                        onChanged: (value){
+                          setState(() {
 
-                      });
-                    },
-                    textInputAction: TextInputAction.next,
-                    onFieldSubmitted: (term){
+                          });
+                        },
+                        textInputAction: TextInputAction.next,
+                        onFieldSubmitted: (term){
 
-                    },
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Message can\'t be empty';
-                      }
-                      return null;
-                    },
-                    controller: tc_sms,
-                    decoration: InputDecoration(
-                      //errorText: errorText,
-                      //hintText: 'e.g. ',
-                      labelText: 'Message',
-                      enabledBorder: OutlineInputBorder(
-                          borderSide:
-                          BorderSide(color: Colors.black)),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black),
-                      ),),
-                    style: const TextStyle(color: Colors.black),
-                  ).p(10),
-                  TextFormField(
-                    maxLines: null,
-                    keyboardType: TextInputType.multiline,
-                    onChanged: (value){
-                      setState(() {
+                        },
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Message can\'t be empty';
+                          }
+                          return null;
+                        },
+                        controller: tc_sms,
+                        decoration: InputDecoration(
+                          //errorText: errorText,
+                          //hintText: 'e.g. ',
+                          labelText: 'Message',
+                          enabledBorder: OutlineInputBorder(
+                              borderSide:
+                              BorderSide(color: Colors.black)),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black),
+                          ),),
+                        style: const TextStyle(color: Colors.black),
+                      ).p(10),
+                      TextFormField(
+                        maxLines: null,
+                        keyboardType: TextInputType.multiline,
+                        onChanged: (value){
+                          setState(() {
 
-                      });
-                    },
-                    textInputAction: TextInputAction.next,
-                    onFieldSubmitted: (term){
+                          });
+                        },
+                        textInputAction: TextInputAction.next,
+                        onFieldSubmitted: (term){
 
-                    },
-                    controller: tc_phone,
-                    decoration: const InputDecoration(
-                      //errorText: _errorText,
-                      //hintText: 'e.g. ',
-                      labelText: 'Sender phone number (optional)',
-                      enabledBorder: OutlineInputBorder(
-                          borderSide:
-                          BorderSide(color: Colors.black)),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black),
-                      ),),
-                    style: const TextStyle(color: Colors.black),
-                  ).p(10),
-                ],
-              ).centered(),
-            ).p(10).centered(),
-            ConstrainedBox(
-              constraints: BoxConstraints.tightFor(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height * 0.10),
-              child: ElevatedButton(
-                  onPressed: (() {
-                    if(formKey.currentState!.validate()){
-                      submit();
-                    }
-                  }),
-                  child: Text("Submit",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontFamily: 'Noto Sans HK',
-                        fontWeight: FontWeight.w400,
-                        color: Color.fromARGB(255, 255, 255, 255),
-                      )).centered(),
-                  style: ButtonStyle(
-                    //backgroundColor: MaterialStateProperty.all<Color>( Color.fromARGB(0, 51, 78, 100)),
-                      backgroundColor: MaterialStateProperty.all(
-                          Colors.black),
-                      shape: MaterialStateProperty.all<
-                          RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                              borderRadius:
-                              BorderRadius.circular(35.0),
-                              side: BorderSide(color: Colors.black)
+                        },
+                        controller: tc_phone,
+                        decoration: const InputDecoration(
+                          //errorText: _errorText,
+                          //hintText: 'e.g. ',
+                          labelText: 'Sender phone number (optional)',
+                          enabledBorder: OutlineInputBorder(
+                              borderSide:
+                              BorderSide(color: Colors.black)),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black),
+                          ),),
+                        style: const TextStyle(color: Colors.black),
+                      ).p(10),
+                    ],
+                  ).centered(),
+                ).p(10).centered(),
+                ConstrainedBox(
+                  constraints: BoxConstraints.tightFor(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height * 0.10),
+                  child: ElevatedButton(
+                      onPressed: (() {
+                        if(formKey.currentState!.validate()){
+                          submit();
+                        }
+                      }),
+                      child: Text("Submit",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontFamily: 'Noto Sans HK',
+                            fontWeight: FontWeight.w400,
+                            color: Color.fromARGB(255, 255, 255, 255),
+                          )).centered(),
+                      style: ButtonStyle(
+                        //backgroundColor: MaterialStateProperty.all<Color>( Color.fromARGB(0, 51, 78, 100)),
+                          backgroundColor: MaterialStateProperty.all(
+                              Colors.black),
+                          shape: MaterialStateProperty.all<
+                              RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.circular(35.0),
+                                  side: BorderSide(color: Colors.black)
+                              )
                           )
                       )
-                  )
-              ).p(10),
-            ),
-            Visibility(
-                visible: result_visible,
-                child: VStack([
-                  VStack([
+                  ).p(10),
+                ),
+                Visibility(
+                  visible: result_visible,
+                  child: VStack([
+                    VStack([
+                      Text(
+                        'Spam Detection Result',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: 'Noto Sans HK',
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black,
+                        ),
+                        textAlign: TextAlign.center,
+                      ).centered(),
+                      Text(
+                        '(Higher score tends to be spam)',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'Noto Sans HK',
+                          //fontWeight: FontWeight.w700,
+                          color: Colors.black,
+                        ),
+                        textAlign: TextAlign.center,
+                      ).centered(),
+                    ]).centered().p(10),
                     Text(
-                      'Spam Detection Result',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: 'Noto Sans HK',
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black,
-                      ),
-                      textAlign: TextAlign.center,
-                    ).centered(),
+                        'Simple Neural Network Score: '+snn_score+'%',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: 'Noto Sans HK',
+                          //fontWeight: FontWeight.w700,
+                          color: Colors.black,
+                        )
+                    ).centered().p(10),
                     Text(
-                      '(Higher score tends to be spam)',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontFamily: 'Noto Sans HK',
-                        //fontWeight: FontWeight.w700,
-                        color: Colors.black,
-                      ),
-                      textAlign: TextAlign.center,
-                    ).centered(),
-                  ]).centered().p(10),
-                  Text(
-                      'Simple Neural Network Score: '+snn_score+'%',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: 'Noto Sans HK',
-                        //fontWeight: FontWeight.w700,
-                        color: Colors.black,
-                      )
-                  ).centered().p(10),
-                  Text(
-                      'Bert Score: '+bert_score+'%',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: 'Noto Sans HK',
-                        //fontWeight: FontWeight.w700,
-                        color: Colors.black,
-                      )
-                  ).centered().p(10),
-                ]),
-            ),
-          ],
-        ).centered().px(30)
+                        'Bert Score: '+bert_score+'%',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: 'Noto Sans HK',
+                          //fontWeight: FontWeight.w700,
+                          color: Colors.black,
+                        )
+                    ).centered().p(10),
+                  ]),
+                ),
+              ],
+            ).centered().px(30)
+        ),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
