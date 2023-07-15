@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -54,15 +56,16 @@ class _MyHomePageState extends State<MyHomePage> {
   final formKey = GlobalKey<FormState>();
 
   Future<void> submit() async{
+    print('Submit');
     datetime = DateTime.now().toString();
     sms = tc_sms.text.toString();
     setState(() {
       SmartDialog.showLoading();
     });
     final response = await http.post(
-      Uri.parse('https://eiu051ow89.execute-api.ap-southeast-1.amazonaws.com/Test/main'),
+      Uri.parse("https://eiu051ow89.execute-api.ap-southeast-1.amazonaws.com/Test/main"),
       headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
+        "Content-Type": "application/json; charset=UTF-8",
       },
       body: jsonEncode(<String, String>{
         "sms": sms,
