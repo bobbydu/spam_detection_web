@@ -50,7 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String sms = '';
   String phone = '12345678';
   String label = 'Not Sure';
-  String datetime = '';
+  String datetime = 'Not selected yet';
   String snn_score = '';
   String bert_score = '';
   String ChatGPT_result = '';
@@ -68,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _label = label;
     }
     final response = await http.post(
-      Uri.parse("https://eiu051ow89.execute-api.ap-southeast-1.amazonaws.com/Test/main"),
+      Uri.parse("https://eiu051ow89.execute-api.ap-southeast-1.amazonaws.com/Production/main"),
       headers: <String, String>{
         "Content-Type": "application/json; charset=UTF-8",
       },
@@ -184,32 +184,30 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),),
                         style: const TextStyle(color: Colors.black),
                       ).p(10),
-                      Container(child: Row(
-                        children: [
-                          Text('Spam/Ham label (optional):').centered().p(10),
-                          DropdownButton(
-                            value: label, //implement initial value or selected value
-                            onChanged: (value){
-                              setState(() { //set state will update UI and State of your App
-                                label = value!.toString(); //change selectval to new value
-                              });
-                            },
-                            items: labelList.map((itemone){
-                              return DropdownMenuItem(
-                                  value: itemone,
-                                  child: Text(itemone)
-                              );
-                            }).toList(),
-                          ).centered().p(10),
-                        ],
-                      ).centered(),),
-                      Container(child: Row(
+                      Wrap(children: [
+                        Text('Spam/Ham label (optional):').centered().p(10),
+                        DropdownButton(
+                          value: label, //implement initial value or selected value
+                          onChanged: (value){
+                            setState(() { //set state will update UI and State of your App
+                              label = value!.toString(); //change selectval to new value
+                            });
+                          },
+                          items: labelList.map((itemone){
+                            return DropdownMenuItem(
+                                value: itemone,
+                                child: Text(itemone)
+                            );
+                          }).toList(),
+                        ).centered().p(10),
+                      ],).centered(),
+                      Wrap(
                         children: [
                           Text('Message received date (optional):').centered().p(10),
                           Text(datetime).centered().p(10),
                           ConstrainedBox(
                             constraints: BoxConstraints.tightFor(
-                                //width: MediaQuery.of(context).size.width * 0.20,
+                              //width: MediaQuery.of(context).size.width * 0.20,
                                 height: MediaQuery.of(context).size.height * 0.10),
                             child: ElevatedButton(
                                 onPressed: (() async{
@@ -252,7 +250,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             ).p(10),
                           ),
                         ],
-                      ).centered(),),
+                      ).centered(),
                     ],
                   ).centered(),
                 ).p(10).centered(),
