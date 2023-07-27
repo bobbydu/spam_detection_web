@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -22,12 +21,15 @@ class MyApp extends StatelessWidget {
       navigatorObservers: [FlutterSmartDialog.observer],
       // here
       builder: FlutterSmartDialog.init(),
-      title: 'Hong Kong Short Message Spam Detection in a Machine Learning Approach',
+      title:
+      'Hong Kong Short Message Spam Detection in a Machine Learning Approach',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Hong Kong Short Message Spam Detection in a Machine Learning Approach'),
+      home: const MyHomePage(
+          title:
+          'Hong Kong Short Message Spam Detection in a Machine Learning Approach'),
     );
   }
 }
@@ -40,7 +42,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   final tc_sms = TextEditingController();
   final tc_phone = TextEditingController();
   final tc_label = TextEditingController();
@@ -51,24 +52,24 @@ class _MyHomePageState extends State<MyHomePage> {
   String phone = '12345678';
   String label = 'Not Sure';
   String datetime = 'Not selected yet';
-  String snn_score = '';
-  String bert_score = '';
+  String result_score = '';
   String ChatGPT_result = '';
   String GoogleBard_result = '';
   final formKey = GlobalKey<FormState>();
 
-  Future<void> submit() async{
+  Future<void> submit() async {
     print('Submit');
     sms = tc_sms.text.toString();
     setState(() {
       SmartDialog.showLoading();
     });
-    String _label='';
-    if(label!='Not Sure'){
+    String _label = '';
+    if (label != 'Not Sure') {
       _label = label;
     }
     final response = await http.post(
-      Uri.parse("https://eiu051ow89.execute-api.ap-southeast-1.amazonaws.com/Production/main"),
+      Uri.parse(
+          "https://eiu051ow89.execute-api.ap-southeast-1.amazonaws.com/Production/main"),
       headers: <String, String>{
         "Content-Type": "application/json; charset=UTF-8",
       },
@@ -80,21 +81,54 @@ class _MyHomePageState extends State<MyHomePage> {
         "datetime": datetime
       }),
     );
-    print('Status code: '+response.statusCode.toString()+', Result: '+jsonDecode(response.body).toString());
+    print('Main\nStatus code: ' +
+        response.statusCode.toString() +
+        ', Result: ' +
+        jsonDecode(response.body).toString());
     final data = json.decode(response.body);
     //print('Json decode: '+data.toString());
-    final snn = data['snn_score'];
-    snn_score = (double.parse(snn)*100).toStringAsFixed(2);
-    final bert = data['bert_score'];
-    bert_score = (double.parse(bert)*100).toStringAsFixed(2);
+    final output = data['output'];
+    result_score = output.toString();
+    final ChatGPT_response = await http.post(
+      Uri.parse(
+          "https://eiu051ow89.execute-api.ap-southeast-1.amazonaws.com/Production/OpenAI-ChatGPT"),
+      headers: <String, String>{
+        "Content-Type": "application/json; charset=UTF-8",
+      },
+      body: jsonEncode(<String, String>{"msg": sms}),
+    );
+    print('ChatGPT\nStatus code: ' +
+        ChatGPT_response.statusCode.toString() +
+        ', Result: ' +
+        jsonDecode(ChatGPT_response.body).toString());
+    final chatgpt_data = json.decode(ChatGPT_response.body);
+    ChatGPT_result = chatgpt_data['body'].toString();
+    final Bard_response = await http.post(
+      Uri.parse(
+          "https://eiu051ow89.execute-api.ap-southeast-1.amazonaws.com/Production/Google-Bard-PaLM"),
+      headers: <String, String>{
+        "Content-Type": "application/json; charset=UTF-8",
+      },
+      body: jsonEncode(<String, String>{"msg": sms}),
+    );
+    print('Bard\nStatus code: ' +
+        Bard_response.statusCode.toString() +
+        ', Result: ' +
+        jsonDecode(Bard_response.body).toString());
+    final bard_data = json.decode(Bard_response.body);
+    GoogleBard_result = bard_data['body'].toString();
     setState(() {
       SmartDialog.dismiss();
       result_visible = true;
     });
   }
 
-  Future<void> datePicker() async{
-    showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime(2000, 01), lastDate: DateTime(210, 01));
+  Future<void> datePicker() async {
+    showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2000, 01),
+        lastDate: DateTime(210, 01));
   }
 
   @override
@@ -102,7 +136,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
   }
 
-  final List<String> labelList = ['Not Sure','Spam', 'Ham'];
+  final List<String> labelList = ['Not Sure', 'Spam', 'Ham'];
 
   @override
   Widget build(BuildContext context) {
@@ -123,23 +157,18 @@ class _MyHomePageState extends State<MyHomePage> {
                             fontFamily: 'Noto Sans HK',
                             fontWeight: FontWeight.w700,
                             color: Colors.black,
-                          )
-                      ).centered().p(10),
+                          )).centered().p(10),
                       Text(
                         'You can input message below to test whether it is spam or not:',
                       ).centered().p(10),
                       TextFormField(
                         maxLines: null,
                         keyboardType: TextInputType.multiline,
-                        onChanged: (value){
-                          setState(() {
-
-                          });
+                        onChanged: (value) {
+                          setState(() {});
                         },
                         textInputAction: TextInputAction.next,
-                        onFieldSubmitted: (term){
-
-                        },
+                        onFieldSubmitted: (term) {},
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'Message can\'t be empty';
@@ -152,65 +181,66 @@ class _MyHomePageState extends State<MyHomePage> {
                           //hintText: 'e.g. ',
                           labelText: 'Message',
                           enabledBorder: OutlineInputBorder(
-                              borderSide:
-                              BorderSide(color: Colors.black)),
+                              borderSide: BorderSide(color: Colors.black)),
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.black),
-                          ),),
+                          ),
+                        ),
                         style: const TextStyle(color: Colors.black),
                       ).p(10),
                       TextFormField(
                         maxLines: null,
                         keyboardType: TextInputType.multiline,
-                        onChanged: (value){
-                          setState(() {
-
-                          });
+                        onChanged: (value) {
+                          setState(() {});
                         },
                         textInputAction: TextInputAction.next,
-                        onFieldSubmitted: (term){
-
-                        },
+                        onFieldSubmitted: (term) {},
                         controller: tc_phone,
                         decoration: const InputDecoration(
                           //errorText: _errorText,
                           //hintText: 'e.g. ',
                           labelText: 'Sender phone number (optional)',
                           enabledBorder: OutlineInputBorder(
-                              borderSide:
-                              BorderSide(color: Colors.black)),
+                              borderSide: BorderSide(color: Colors.black)),
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.black),
-                          ),),
+                          ),
+                        ),
                         style: const TextStyle(color: Colors.black),
                       ).p(10),
-                      Wrap(children: [
-                        Text('Spam/Ham label (optional):').centered().p(10),
-                        DropdownButton(
-                          value: label, //implement initial value or selected value
-                          onChanged: (value){
-                            setState(() { //set state will update UI and State of your App
-                              label = value!.toString(); //change selectval to new value
-                            });
-                          },
-                          items: labelList.map((itemone){
-                            return DropdownMenuItem(
-                                value: itemone,
-                                child: Text(itemone)
-                            );
-                          }).toList(),
-                        ).centered().p(10),
-                      ],).centered(),
                       Wrap(
                         children: [
-                          Text('Message received date (optional):').centered().p(10),
+                          Text('Spam/Ham label (optional):').centered().p(10),
+                          DropdownButton(
+                            value:
+                            label, //implement initial value or selected value
+                            onChanged: (value) {
+                              setState(() {
+                                //set state will update UI and State of your App
+                                label = value!
+                                    .toString(); //change selectval to new value
+                              });
+                            },
+                            items: labelList.map((itemone) {
+                              return DropdownMenuItem(
+                                  value: itemone, child: Text(itemone));
+                            }).toList(),
+                          ).centered().p(10),
+                        ],
+                      ).centered(),
+                      Wrap(
+                        children: [
+                          Text('Message received date (optional):')
+                              .centered()
+                              .p(10),
                           Text(datetime).centered().p(10),
                           ConstrainedBox(
                             constraints: BoxConstraints.tightFor(
                               //width: MediaQuery.of(context).size.width * 0.20,
                                 height: MediaQuery.of(context).size.height * 0.10),
                             child: ElevatedButton(
-                                onPressed: (() async{
+                                onPressed: (() async {
                                   final result = await showDatePicker(
                                       context: context,
                                       initialDate: DateTime.now(),
@@ -218,11 +248,18 @@ class _MyHomePageState extends State<MyHomePage> {
                                       lastDate: DateTime(2100, 12));
                                   print(result.toString());
                                   final timeOfDay = await showTimePicker(
-                                      context: context, initialTime: TimeOfDay.now());
+                                      context: context,
+                                      initialTime: TimeOfDay.now());
                                   print(timeOfDay);
-                                  DateFormat df = DateFormat('yyyy-MM-dd HH:mm:ss');
+                                  DateFormat df =
+                                  DateFormat('yyyy-MM-dd HH:mm:ss');
                                   setState(() {
-                                    DateTime dt = DateTime(result!.year,result.month,result.day,timeOfDay!.hour,timeOfDay.minute);
+                                    DateTime dt = DateTime(
+                                        result!.year,
+                                        result.month,
+                                        result.day,
+                                        timeOfDay!.hour,
+                                        timeOfDay.minute);
                                     datetime = df.format(dt);
                                   });
                                 }),
@@ -236,18 +273,16 @@ class _MyHomePageState extends State<MyHomePage> {
                                     )).centered(),
                                 style: ButtonStyle(
                                   //backgroundColor: MaterialStateProperty.all<Color>( Color.fromARGB(0, 51, 78, 100)),
-                                    backgroundColor: MaterialStateProperty.all(
-                                        Colors.white),
+                                    backgroundColor:
+                                    MaterialStateProperty.all(Colors.white),
                                     shape: MaterialStateProperty.all<
                                         RoundedRectangleBorder>(
                                         RoundedRectangleBorder(
                                             borderRadius:
                                             BorderRadius.circular(30.0),
-                                            side: BorderSide(color: Colors.black)
-                                        )
-                                    )
-                                )
-                            ).p(10),
+                                            side: BorderSide(
+                                                color: Colors.black)))))
+                                .p(10),
                           ),
                         ],
                       ).centered(),
@@ -260,7 +295,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       height: MediaQuery.of(context).size.height * 0.10),
                   child: ElevatedButton(
                       onPressed: (() {
-                        if(formKey.currentState!.validate()){
+                        if (formKey.currentState!.validate()) {
                           submit();
                         }
                       }),
@@ -274,18 +309,14 @@ class _MyHomePageState extends State<MyHomePage> {
                           )).centered(),
                       style: ButtonStyle(
                         //backgroundColor: MaterialStateProperty.all<Color>( Color.fromARGB(0, 51, 78, 100)),
-                          backgroundColor: MaterialStateProperty.all(
-                              Colors.black),
-                          shape: MaterialStateProperty.all<
-                              RoundedRectangleBorder>(
+                          backgroundColor:
+                          MaterialStateProperty.all(Colors.black),
+                          shape:
+                          MaterialStateProperty.all<RoundedRectangleBorder>(
                               RoundedRectangleBorder(
-                                  borderRadius:
-                                  BorderRadius.circular(35.0),
-                                  side: BorderSide(color: Colors.black)
-                              )
-                          )
-                      )
-                  ).p(10),
+                                  borderRadius: BorderRadius.circular(35.0),
+                                  side: BorderSide(color: Colors.black)))))
+                      .p(10),
                 ),
                 Visibility(
                   visible: result_visible,
@@ -313,30 +344,59 @@ class _MyHomePageState extends State<MyHomePage> {
                       ).centered(),
                     ]).centered().p(10),
                     Text(
-                        'Simple Neural Network Score:\n'+snn_score+'%',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontFamily: 'Noto Sans HK',
-                          //fontWeight: FontWeight.w700,
-                          color: Colors.black,
-                        ),
+                      result_score + '%',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontFamily: 'Noto Sans HK',
+                        //fontWeight: FontWeight.w700,
+                        color: Colors.black,
+                      ),
                       textAlign: TextAlign.center,
                     ).centered().p(10),
                     Text(
-                        'Bert Score:\n'+bert_score+'%',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontFamily: 'Noto Sans HK',
-                          //fontWeight: FontWeight.w700,
-                          color: Colors.black,
-                        ),
+                      'ChatGPT Result',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontFamily: 'Noto Sans HK',
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black,
+                      ),
+                      textAlign: TextAlign.center,
+                    ).centered().p(10),
+                    Text(
+                      ChatGPT_result,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontFamily: 'Noto Sans HK',
+                        //fontWeight: FontWeight.w700,
+                        color: Colors.black,
+                      ),
+                      textAlign: TextAlign.center,
+                    ).centered().p(10),
+                    Text(
+                      'Google Bard Result',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontFamily: 'Noto Sans HK',
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black,
+                      ),
+                      textAlign: TextAlign.center,
+                    ).centered().p(10),
+                    Text(
+                      GoogleBard_result,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontFamily: 'Noto Sans HK',
+                        //fontWeight: FontWeight.w700,
+                        color: Colors.black,
+                      ),
                       textAlign: TextAlign.center,
                     ).centered().p(10),
                   ]),
                 ),
               ],
-            ).centered().px(30)
-        ),
+            ).centered().px(30)),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
