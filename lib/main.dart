@@ -323,7 +323,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: VStack([
                     VStack([
                       Text(
-                        'Spam Detection Result',
+                        'Machine Learning Model Result',
                         style: TextStyle(
                           fontSize: 20,
                           fontFamily: 'Noto Sans HK',
