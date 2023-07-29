@@ -83302,7 +83302,7 @@ q.y=q.d.a.a
 q.ac(new A.ai3())
 p=q.Q
 p=p!=="Not Sure"?p:""
-o=A.ld("https://eiu051ow89.execute-api.ap-southeast-1.amazonaws.com/Production/main")
+o=A.ld("https://api.whosmessage.tech/Production/main")
 n=t.N
 m=A.ax(["Content-Type","application/json; charset=UTF-8"],n,n)
 s=2
@@ -83314,7 +83314,7 @@ k=A.Fa(A.EY(o).c.a.h(0,"charset"))
 j=l.w
 A.jY(B.c.N("Main\nStatus code: "+m+", Result: ",J.cF(B.aA.xQ(0,k.cZ(0,j),null))))
 q.at=J.cF(J.bo(B.aA.cZ(0,A.Fa(A.EY(o).c.a.h(0,"charset")).cZ(0,j)),"output"))
-j=A.ld("https://eiu051ow89.execute-api.ap-southeast-1.amazonaws.com/Production/OpenAI-ChatGPT")
+j=A.ld("https://api.whosmessage.tech/Production/OpenAI-ChatGPT")
 o=A.ax(["Content-Type","application/json; charset=UTF-8"],n,n)
 s=3
 return A.a4(A.ar3(j,B.aA.y4(A.ax(["msg",q.y],n,n),null),o),$async$k7)
@@ -83325,7 +83325,7 @@ k=A.Fa(A.EY(j).c.a.h(0,"charset"))
 m=i.w
 A.jY(B.c.N("ChatGPT\nStatus code: "+o+", Result: ",J.cF(B.aA.xQ(0,k.cZ(0,m),null))))
 q.ax=J.cF(J.bo(B.aA.cZ(0,A.Fa(A.EY(j).c.a.h(0,"charset")).cZ(0,m)),"body"))
-m=A.ld("https://eiu051ow89.execute-api.ap-southeast-1.amazonaws.com/Production/Google-Bard-PaLM")
+m=A.ld("https://api.whosmessage.tech/Production/Google-Bard-PaLM")
 j=A.ax(["Content-Type","application/json; charset=UTF-8"],n,n)
 s=4
 return A.a4(A.ar3(m,B.aA.y4(A.ax(["msg",q.y],n,n),null),j),$async$k7)
