@@ -22,14 +22,14 @@ class MyApp extends StatelessWidget {
       // here
       builder: FlutterSmartDialog.init(),
       title:
-      'Hong Kong Short Message Spam Detection in a Machine Learning Approach',
+          'Hong Kong Short Message Spam Detection in a Machine Learning Approach',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
       home: const MyHomePage(
           title:
-          'Hong Kong Short Message Spam Detection in a Machine Learning Approach'),
+              'Hong Kong Short Message Spam Detection in a Machine Learning Approach'),
     );
   }
 }
@@ -68,8 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _label = label;
     }
     final response = await http.post(
-      Uri.parse(
-          "https://eiu051ow89.execute-api.ap-southeast-1.amazonaws.com/Production/main"),
+      Uri.parse("https://api.whosmessage.tech/Production/main"),
       headers: <String, String>{
         "Content-Type": "application/json; charset=UTF-8",
       },
@@ -90,8 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final output = data['output'];
     result_score = output.toString();
     final ChatGPT_response = await http.post(
-      Uri.parse(
-          "https://eiu051ow89.execute-api.ap-southeast-1.amazonaws.com/Production/OpenAI-ChatGPT"),
+      Uri.parse("https://api.whosmessage.tech/Production/OpenAI-ChatGPT"),
       headers: <String, String>{
         "Content-Type": "application/json; charset=UTF-8",
       },
@@ -104,8 +102,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final chatgpt_data = json.decode(ChatGPT_response.body);
     ChatGPT_result = chatgpt_data['body'].toString();
     final Bard_response = await http.post(
-      Uri.parse(
-          "https://eiu051ow89.execute-api.ap-southeast-1.amazonaws.com/Production/Google-Bard-PaLM"),
+      Uri.parse("https://api.whosmessage.tech/Production/Google-Bard-PaLM"),
       headers: <String, String>{
         "Content-Type": "application/json; charset=UTF-8",
       },
@@ -145,101 +142,101 @@ class _MyHomePageState extends State<MyHomePage> {
         key: formKey,
         child: SingleChildScrollView(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  child: VStack(
-                    [
-                      Text(
-                          'Hong Kong Short Message Spam Detection in a Machine Learning Approach',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontFamily: 'Noto Sans HK',
-                            fontWeight: FontWeight.w700,
-                            color: Colors.black,
-                          )).centered().p(10),
-                      Text(
-                        'You can input message below to test whether it is spam or not:',
-                      ).centered().p(10),
-                      TextFormField(
-                        maxLines: null,
-                        keyboardType: TextInputType.multiline,
-                        onChanged: (value) {
-                          setState(() {});
-                        },
-                        textInputAction: TextInputAction.next,
-                        onFieldSubmitted: (term) {},
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Message can\'t be empty';
-                          }
-                          return null;
-                        },
-                        controller: tc_sms,
-                        decoration: InputDecoration(
-                          //errorText: errorText,
-                          //hintText: 'e.g. ',
-                          labelText: 'Message',
-                          enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black)),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black),
-                          ),
-                        ),
-                        style: const TextStyle(color: Colors.black),
-                      ).p(10),
-                      TextFormField(
-                        maxLines: null,
-                        keyboardType: TextInputType.multiline,
-                        onChanged: (value) {
-                          setState(() {});
-                        },
-                        textInputAction: TextInputAction.next,
-                        onFieldSubmitted: (term) {},
-                        controller: tc_phone,
-                        decoration: const InputDecoration(
-                          //errorText: _errorText,
-                          //hintText: 'e.g. ',
-                          labelText: 'Sender phone number (optional)',
-                          enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black)),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black),
-                          ),
-                        ),
-                        style: const TextStyle(color: Colors.black),
-                      ).p(10),
-                      Wrap(
-                        children: [
-                          Text('Spam/Ham label (optional):').centered().p(10),
-                          DropdownButton(
-                            value:
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              child: VStack(
+                [
+                  Text(
+                      'Hong Kong Short Message Spam Detection in a Machine Learning Approach',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontFamily: 'Noto Sans HK',
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black,
+                      )).centered().p(10),
+                  Text(
+                    'You can input message below to test whether it is spam or not:',
+                  ).centered().p(10),
+                  TextFormField(
+                    maxLines: null,
+                    keyboardType: TextInputType.multiline,
+                    onChanged: (value) {
+                      setState(() {});
+                    },
+                    textInputAction: TextInputAction.next,
+                    onFieldSubmitted: (term) {},
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Message can\'t be empty';
+                      }
+                      return null;
+                    },
+                    controller: tc_sms,
+                    decoration: InputDecoration(
+                      //errorText: errorText,
+                      //hintText: 'e.g. ',
+                      labelText: 'Message',
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black)),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black),
+                      ),
+                    ),
+                    style: const TextStyle(color: Colors.black),
+                  ).p(10),
+                  TextFormField(
+                    maxLines: null,
+                    keyboardType: TextInputType.multiline,
+                    onChanged: (value) {
+                      setState(() {});
+                    },
+                    textInputAction: TextInputAction.next,
+                    onFieldSubmitted: (term) {},
+                    controller: tc_phone,
+                    decoration: const InputDecoration(
+                      //errorText: _errorText,
+                      //hintText: 'e.g. ',
+                      labelText: 'Sender phone number (optional)',
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black)),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black),
+                      ),
+                    ),
+                    style: const TextStyle(color: Colors.black),
+                  ).p(10),
+                  Wrap(
+                    children: [
+                      Text('Spam/Ham label (optional):').centered().p(10),
+                      DropdownButton(
+                        value:
                             label, //implement initial value or selected value
-                            onChanged: (value) {
-                              setState(() {
-                                //set state will update UI and State of your App
-                                label = value!
-                                    .toString(); //change selectval to new value
-                              });
-                            },
-                            items: labelList.map((itemone) {
-                              return DropdownMenuItem(
-                                  value: itemone, child: Text(itemone));
-                            }).toList(),
-                          ).centered().p(10),
-                        ],
-                      ).centered(),
-                      Wrap(
-                        children: [
-                          Text('Message received date (optional):')
-                              .centered()
-                              .p(10),
-                          Text(datetime).centered().p(10),
-                          ConstrainedBox(
-                            constraints: BoxConstraints.tightFor(
-                              //width: MediaQuery.of(context).size.width * 0.20,
-                                height: MediaQuery.of(context).size.height * 0.10),
-                            child: ElevatedButton(
+                        onChanged: (value) {
+                          setState(() {
+                            //set state will update UI and State of your App
+                            label = value!
+                                .toString(); //change selectval to new value
+                          });
+                        },
+                        items: labelList.map((itemone) {
+                          return DropdownMenuItem(
+                              value: itemone, child: Text(itemone));
+                        }).toList(),
+                      ).centered().p(10),
+                    ],
+                  ).centered(),
+                  Wrap(
+                    children: [
+                      Text('Message received date (optional):')
+                          .centered()
+                          .p(10),
+                      Text(datetime).centered().p(10),
+                      ConstrainedBox(
+                        constraints: BoxConstraints.tightFor(
+                            //width: MediaQuery.of(context).size.width * 0.20,
+                            height: MediaQuery.of(context).size.height * 0.10),
+                        child: ElevatedButton(
                                 onPressed: (() async {
                                   final result = await showDatePicker(
                                       context: context,
@@ -252,7 +249,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                       initialTime: TimeOfDay.now());
                                   print(timeOfDay);
                                   DateFormat df =
-                                  DateFormat('yyyy-MM-dd HH:mm:ss');
+                                      DateFormat('yyyy-MM-dd HH:mm:ss');
                                   setState(() {
                                     DateTime dt = DateTime(
                                         result!.year,
@@ -272,28 +269,28 @@ class _MyHomePageState extends State<MyHomePage> {
                                       color: Colors.black,
                                     )).centered(),
                                 style: ButtonStyle(
-                                  //backgroundColor: MaterialStateProperty.all<Color>( Color.fromARGB(0, 51, 78, 100)),
+                                    //backgroundColor: MaterialStateProperty.all<Color>( Color.fromARGB(0, 51, 78, 100)),
                                     backgroundColor:
-                                    MaterialStateProperty.all(Colors.white),
+                                        MaterialStateProperty.all(Colors.white),
                                     shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
+                                            RoundedRectangleBorder>(
                                         RoundedRectangleBorder(
                                             borderRadius:
-                                            BorderRadius.circular(30.0),
+                                                BorderRadius.circular(30.0),
                                             side: BorderSide(
                                                 color: Colors.black)))))
-                                .p(10),
-                          ),
-                        ],
-                      ).centered(),
+                            .p(10),
+                      ),
                     ],
                   ).centered(),
-                ).p(10).centered(),
-                ConstrainedBox(
-                  constraints: BoxConstraints.tightFor(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height * 0.10),
-                  child: ElevatedButton(
+                ],
+              ).centered(),
+            ).p(10).centered(),
+            ConstrainedBox(
+              constraints: BoxConstraints.tightFor(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height * 0.10),
+              child: ElevatedButton(
                       onPressed: (() {
                         if (formKey.currentState!.validate()) {
                           submit();
@@ -308,95 +305,95 @@ class _MyHomePageState extends State<MyHomePage> {
                             color: Color.fromARGB(255, 255, 255, 255),
                           )).centered(),
                       style: ButtonStyle(
-                        //backgroundColor: MaterialStateProperty.all<Color>( Color.fromARGB(0, 51, 78, 100)),
+                          //backgroundColor: MaterialStateProperty.all<Color>( Color.fromARGB(0, 51, 78, 100)),
                           backgroundColor:
-                          MaterialStateProperty.all(Colors.black),
+                              MaterialStateProperty.all(Colors.black),
                           shape:
-                          MaterialStateProperty.all<RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(35.0),
-                                  side: BorderSide(color: Colors.black)))))
-                      .p(10),
-                ),
-                Visibility(
-                  visible: result_visible,
-                  child: VStack([
-                    VStack([
-                      Text(
-                        'Machine Learning Model Result',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontFamily: 'Noto Sans HK',
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black,
-                        ),
-                        textAlign: TextAlign.center,
-                      ).centered(),
-                      Text(
-                        '(Higher score tends to be spam)',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontFamily: 'Noto Sans HK',
-                          //fontWeight: FontWeight.w700,
-                          color: Colors.black,
-                        ),
-                        textAlign: TextAlign.center,
-                      ).centered(),
-                    ]).centered().p(10),
-                    Text(
-                      result_score + '%',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: 'Noto Sans HK',
-                        //fontWeight: FontWeight.w700,
-                        color: Colors.black,
-                      ),
-                      textAlign: TextAlign.center,
-                    ).centered().p(10),
-                    Text(
-                      'ChatGPT Result',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: 'Noto Sans HK',
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black,
-                      ),
-                      textAlign: TextAlign.center,
-                    ).centered().p(10),
-                    Text(
-                      ChatGPT_result,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: 'Noto Sans HK',
-                        //fontWeight: FontWeight.w700,
-                        color: Colors.black,
-                      ),
-                      textAlign: TextAlign.center,
-                    ).centered().p(10),
-                    Text(
-                      'Google Bard Result',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: 'Noto Sans HK',
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black,
-                      ),
-                      textAlign: TextAlign.center,
-                    ).centered().p(10),
-                    Text(
-                      GoogleBard_result,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: 'Noto Sans HK',
-                        //fontWeight: FontWeight.w700,
-                        color: Colors.black,
-                      ),
-                      textAlign: TextAlign.center,
-                    ).centered().p(10),
-                  ]),
-                ),
-              ],
-            ).centered().px(30)),
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(35.0),
+                                      side: BorderSide(color: Colors.black)))))
+                  .p(10),
+            ),
+            Visibility(
+              visible: result_visible,
+              child: VStack([
+                VStack([
+                  Text(
+                    'Machine Learning Model Result',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontFamily: 'Noto Sans HK',
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black,
+                    ),
+                    textAlign: TextAlign.center,
+                  ).centered(),
+                  Text(
+                    '(Higher score tends to be spam)',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontFamily: 'Noto Sans HK',
+                      //fontWeight: FontWeight.w700,
+                      color: Colors.black,
+                    ),
+                    textAlign: TextAlign.center,
+                  ).centered(),
+                ]).centered().p(10),
+                Text(
+                  result_score + '%',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontFamily: 'Noto Sans HK',
+                    //fontWeight: FontWeight.w700,
+                    color: Colors.black,
+                  ),
+                  textAlign: TextAlign.center,
+                ).centered().p(10),
+                Text(
+                  'ChatGPT Result',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontFamily: 'Noto Sans HK',
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black,
+                  ),
+                  textAlign: TextAlign.center,
+                ).centered().p(10),
+                Text(
+                  ChatGPT_result,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontFamily: 'Noto Sans HK',
+                    //fontWeight: FontWeight.w700,
+                    color: Colors.black,
+                  ),
+                  textAlign: TextAlign.center,
+                ).centered().p(10),
+                Text(
+                  'Google Bard Result',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontFamily: 'Noto Sans HK',
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black,
+                  ),
+                  textAlign: TextAlign.center,
+                ).centered().p(10),
+                Text(
+                  GoogleBard_result,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontFamily: 'Noto Sans HK',
+                    //fontWeight: FontWeight.w700,
+                    color: Colors.black,
+                  ),
+                  textAlign: TextAlign.center,
+                ).centered().p(10),
+              ]),
+            ),
+          ],
+        ).centered().px(30)),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
