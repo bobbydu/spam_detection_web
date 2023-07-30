@@ -1,4 +1,4 @@
-# spam_detection
+# spam_detection_web
 
 This is a Flutter project for Hong Kong Short Message Spam Detection in a Machine Learning Approach.
 
